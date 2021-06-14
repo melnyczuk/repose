@@ -1,26 +1,13 @@
 import os
 from dataclasses import dataclass
+from typing import Iterable
 
 import torch
-from torch.functional import Tensor
-from torch.nn import BCEWithLogitsLoss
+from torch.nn.parameter import Parameter
 from torch.optim import Adam
 
 
-class Loss:
-    @staticmethod
-    def calc(tensor: Tensor, smooth: bool = False, real: bool = True) -> Tensor:
-        labels = Loss.__labels(tensor, real=real) * (0.9 if smooth else 1.0)
-        criterion = BCEWithLogitsLoss()
-        return criterion(tensor.squeeze(), labels)  # calculate loss
-
-    @staticmethod
-    def __labels(tensor: Tensor, real: bool = True) -> Tensor:
-        batch_size = tensor.size(0)
-        return torch.ones(batch_size) if real else torch.zeros(batch_size)
-
-
-@dataclass(frozen=True)
+@dataclass(eq=True, frozen=True)
 class Optimizers:
     generator: Adam
     discriminator: Adam
@@ -31,8 +18,8 @@ class Optimizers:
     @classmethod
     def from_params(
         cls,
-        generator_params,
-        discriminator_params,
+        generator_params: Iterable[Parameter],
+        discriminator_params: Iterable[Parameter],
         learning_rate: float,
     ) -> "Optimizers":
         return cls(

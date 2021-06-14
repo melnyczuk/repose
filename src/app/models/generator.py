@@ -1,12 +1,14 @@
 # https://github.com/nbertagnolli/pytorch-simple-gan/blob/master/models.py
 
 import os
+from dataclasses import dataclass
 
 import torch
 from torch.functional import Tensor
 from torch.nn import Linear, Module, Sigmoid
 
 
+@dataclass
 class Generator(Module):
     dense_layer: Linear
     activation: Sigmoid
@@ -16,6 +18,9 @@ class Generator(Module):
         super(Generator, self).__init__()
         self.dense_layer = Linear(length, length)
         self.activation = Sigmoid()
+
+    def __hash__(self) -> int:
+        return super().__hash__()
 
     def forward(self: "Generator", x: Tensor) -> Tensor:
         return self.activation(self.dense_layer(x))
