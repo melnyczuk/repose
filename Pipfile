@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[packages]
+numpy = "*"
+torch = "*"
+
+[dev-packages]
+black = "==21.5b2"
+data-science-types = "*"
+flake8 = "*"
+isort = "*"
+mypy = "*"
+pytest = "*"
+
+[requires]
+python_version = "3.9"
+
+[scripts]
+cli = "python -m src.cli"
+format = "black -l 80 ."
+lint = "flake8 --max-line-length 80 ."
+sort = "isort --atomic ."
+typecheck = "mypy ."
