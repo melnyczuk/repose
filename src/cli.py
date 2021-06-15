@@ -2,15 +2,15 @@ import argparse
 
 from torch.utils.data import DataLoader
 
-from src import Repose
-from src.adapters import Coco, CocoDataset
+from src.repose import Repose
+from src.repose.adapters import Coco, CocoDataset
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Repose GAN")
     parser.add_argument(
         "--load",
         type=bool,
-        default=True,
+        default=False,
         action=argparse.BooleanOptionalAction,
         help="Load model from weight file",
     )
@@ -60,12 +60,12 @@ if __name__ == "__main__":
 
     if args.train and args.weights:
         train_loader: DataLoader = DataLoader(
-            CocoDataset(args.data),
+            CocoDataset(args.train),
             batch_size=args.batch,
             num_workers=args.workers,
         )
         repose.train(train_loader, args.epochs, save_path=args.samples)
-        repose.save(args.weights)
+        repose.save_weights(args.weights)
 
     output = Coco.from_tensor(repose.generate())
     print(f"{output=}")

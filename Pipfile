@@ -21,8 +21,8 @@ python_version = "3.9"
 
 [scripts]
 build = "python -m build"
-cli = "python -m cli"
-format = "black -l 80 ."
-lint = "flake8 --max-line-length 80 ."
-sort = "isort --atomic ."
-typecheck = "mypy ."
+cli = "python -m src.cli"
+format = "black -l 80 src"
+lint = "flake8 --max-line-length 80 src"
+sort = "isort --atomic src"
+typecheck = "mypy src"
