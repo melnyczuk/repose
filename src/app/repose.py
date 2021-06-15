@@ -9,8 +9,8 @@ import torch
 from torch.functional import Tensor
 from torch.utils.data import DataLoader
 
-from src.app.models import Discriminator, Generator
-from src.app.utils import Loss, Optimizers
+from src.app.models import Discriminator, Generator, Optimizers
+from src.app.utils import Loss
 
 LOSS_LOG = """
 Epoch [{}/{}]:
