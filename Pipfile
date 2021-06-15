@@ -9,6 +9,7 @@ torch = "*"
 
 [dev-packages]
 black = "==21.5b2"
+build = "*"
 data-science-types = "*"
 flake8 = "*"
 isort = "*"
