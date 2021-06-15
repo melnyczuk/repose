@@ -13,7 +13,7 @@ from torch.utils.data import DataLoader
 from src.app.models import Discriminator, Generator, Optimizers
 from src.app.utils import Loss
 
-LOSS_LOG = """
+TRAINING_LOSS_LOG_MSG = """
 Epoch [{}/{}]:
 | discriminator loss: {}
 |     generator loss: {}
@@ -108,7 +108,7 @@ class Repose:
                     sample_saver(batch)
 
             print(
-                LOSS_LOG.format(
+                TRAINING_LOSS_LOG_MSG.format(
                     epoch + 1,
                     num_epochs,
                     discriminator_loss.item(),
