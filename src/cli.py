@@ -2,8 +2,8 @@ import argparse
 
 from torch.utils.data import DataLoader
 
-from src.adapters.coco import Coco, CocoDataset
 from src.app import Repose
+from src.app.adapters import Coco, CocoDataset
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Repose GAN")
