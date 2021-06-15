@@ -20,6 +20,7 @@ pytest = "*"
 python_version = "3.9"
 
 [scripts]
+build = "python -m build"
 cli = "python -m cli"
 format = "black -l 80 ."
 lint = "flake8 --max-line-length 80 ."

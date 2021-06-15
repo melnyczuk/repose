@@ -1,4 +1,7 @@
 .mypy_cache
 .vscode
+build
 data
+dist
+*.egg-info
 weights
