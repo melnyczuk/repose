@@ -19,7 +19,7 @@ pytest = "*"
 python_version = "3.9"
 
 [scripts]
-cli = "python -m src.cli"
+cli = "python -m cli"
 format = "black -l 80 ."
 lint = "flake8 --max-line-length 80 ."
 sort = "isort --atomic ."

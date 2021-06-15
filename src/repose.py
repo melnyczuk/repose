@@ -10,8 +10,8 @@ import torch
 from torch.functional import Tensor
 from torch.utils.data import DataLoader
 
-from src.app.models import Discriminator, Generator, Optimizers
-from src.app.utils import Loss
+from src.models import Discriminator, Generator, Optimizers
+from src.utils import Loss
 
 TRAINING_LOSS_LOG_MSG = """
 Epoch [{}/{}]:
