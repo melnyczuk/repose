@@ -8,12 +8,25 @@ from src.app import Repose
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run Repose GAN")
     parser.add_argument(
-        "data",
+        "--load",
+        type=bool,
+        default=True,
+        action=argparse.BooleanOptionalAction,
+        help="Load model from weight file",
+    )
+    parser.add_argument(
+        "--train",
         type=str,
         help="Training data",
     )
     parser.add_argument(
-        "--outdir",
+        "--weights",
+        type=str,
+        default=None,
+        help="Dir for saved weights",
+    )
+    parser.add_argument(
+        "--samples",
         type=str,
         default=None,
         help="Dir for saved samples",
@@ -39,11 +52,20 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    train_loader: DataLoader = DataLoader(
-        CocoDataset(args.data),
-        batch_size=args.batch,
-        num_workers=args.workers,
+    repose = (
+        Repose.load(args.weights)
+        if args.load and args.weights
+        else Repose(data_length=Coco.LENGTH)
     )
 
-    repose = Repose(data_length=Coco.LENGTH)
-    repose.train(train_loader, args.epochs, save_path=args.outdir)
+    if args.train and args.weights:
+        train_loader: DataLoader = DataLoader(
+            CocoDataset(args.data),
+            batch_size=args.batch,
+            num_workers=args.workers,
+        )
+        repose.train(train_loader, args.epochs, save_path=args.samples)
+        repose.save(args.weights)
+
+    output = Coco.from_tensor(repose.generate())
+    print(f"{output=}")

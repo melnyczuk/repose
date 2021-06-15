@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
+from torch.functional import Tensor
 from torch.utils.data import Dataset
 
 NAMES: dict[int, str] = {
@@ -42,6 +43,10 @@ class Coco:
     score: Optional[float] = None
 
     LENGTH: int = 17 * 2  # aka 17 coordinates
+
+    @classmethod
+    def from_tensor(cls, tensor: Tensor) -> "Coco":
+        return cls.from_array(tensor.detach().numpy())
 
     @classmethod
     def from_array(cls, arr: np.ndarray) -> "Coco":
