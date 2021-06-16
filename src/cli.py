@@ -65,7 +65,7 @@ if __name__ == "__main__":
             num_workers=args.workers,
         )
         repose.train(train_loader, args.epochs, save_path=args.samples)
-        repose.save_weights(args.weights)
+        repose.save(args.weights)
 
     output = Coco.from_tensor(repose.generate())
     print(f"{output=}")

@@ -2,7 +2,7 @@
 
 import csv
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Union
 
 import numpy as np
 from torch.functional import Tensor
@@ -36,6 +36,14 @@ class PoseKeyPoint:
     name: str
     score: Optional[float] = None
 
+    def to_json(self: "PoseKeyPoint") -> dict[str, Union[str, None]]:
+        return {
+            "x": str(self.x),
+            "y": str(self.y),
+            "name": str(self.name),
+            "score": str(self.score) if self.score else None,
+        }
+
 
 @dataclass(eq=True, frozen=True)
 class Coco:
@@ -60,6 +68,14 @@ class Coco:
     def to_array(self: "Coco") -> np.ndarray:
         coords = ((keypoint.x, keypoint.y) for keypoint in self.keypoints)
         return np.array(list(coords)).flatten()
+
+    def to_json(
+        self: "Coco",
+    ) -> dict[str, Union[list[dict[str, Union[str, None]]], str, None]]:
+        return {
+            "keypoints": [kp.to_json() for kp in self.keypoints],
+            "score": str(self.score) if self.score else None,
+        }
 
 
 class CocoDataset(Dataset):
