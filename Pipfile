@@ -9,6 +9,7 @@ torch = "*"
 
 [dev-packages]
 black = "==21.5b2"
+build = "*"
 data-science-types = "*"
 flake8 = "*"
 isort = "*"
@@ -19,8 +20,10 @@ pytest = "*"
 python_version = "3.9"
 
 [scripts]
+build = "python -m build"
+clean = "rm -r build dist src/repose.egg-info"
 cli = "python -m src.cli"
-format = "black -l 80 ."
-lint = "flake8 --max-line-length 80 ."
-sort = "isort --atomic ."
-typecheck = "mypy ."
+format = "black -l 80 src"
+lint = "flake8 --max-line-length 80 src"
+sort = "isort --atomic src"
+typecheck = "mypy src"

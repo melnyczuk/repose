@@ -1,6 +1,7 @@
 # https://github.com/tooth2/Handwritten-digits-generation/blob/main/MNIST_GAN.ipynb
 
 import csv
+import os
 from dataclasses import dataclass
 from typing import Callable, Optional
 
@@ -9,10 +10,10 @@ import torch
 from torch.functional import Tensor
 from torch.utils.data import DataLoader
 
-from src.app.models import Discriminator, Generator
-from src.app.utils import Loss, Optimizers
+from .models import Discriminator, Generator, Optimizers
+from .utils import Loss
 
-LOSS_LOG = """
+TRAINING_LOSS_LOG_MSG = """
 Epoch [{}/{}]:
 | discriminator loss: {}
 |     generator loss: {}
@@ -25,6 +26,8 @@ class Repose:
     generator: Generator
     discriminator: Discriminator
     optimizers: Optimizers
+
+    WEIGHT_FILENAME = "repose.pt"
 
     def __init__(
         self: "Repose",
@@ -50,12 +53,33 @@ class Repose:
         )
 
     @classmethod
-    def load_weights(cls, dir: str) -> "Repose":
+    def load(cls, dir: str) -> "Repose":
+        if not dir or not os.path.isdir(dir):
+            raise FileNotFoundError("Please provide weights dir")
+
+        path = os.path.join(dir, cls.WEIGHT_FILENAME)
+        return torch.load(path)
+
+    @classmethod
+    def load_weights(cls, dir: str, data_length: int) -> "Repose":
         return cls(
+            data_length=data_length,
             generator=Generator.load(dir),
             discriminator=Discriminator.load(dir),
             optimizers=Optimizers.load(dir),
         )
+
+    def generate(self: "Repose", n: int = 1) -> Tensor:
+        fake_data = self.__random_tensor(n)
+        return self.generator(fake_data)
+
+    def save(self: "Repose", dir: str):
+        if not dir or not os.path.isdir(dir):
+            raise FileNotFoundError("Please provide weights dir")
+
+        path = os.path.join(dir, "repose.pt")
+        torch.save(self, path)
+        return
 
     def save_weights(self: "Repose", dir: str) -> None:
         self.generator.save(dir)
@@ -69,8 +93,7 @@ class Repose:
         num_epochs: int = 1,
         save_path: Optional[str] = None,
     ):
-        if save_path:
-            sample_saver = self.__get_sample_saver(save_path)
+        sample_saver = self.__get_sample_saver(save_path) if save_path else None
 
         for epoch in range(num_epochs):
             for batch, real_poses in enumerate(train_loader):
@@ -85,7 +108,7 @@ class Repose:
                     sample_saver(batch)
 
             print(
-                LOSS_LOG.format(
+                TRAINING_LOSS_LOG_MSG.format(
                     epoch + 1,
                     num_epochs,
                     discriminator_loss.item(),

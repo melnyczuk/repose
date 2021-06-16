@@ -12,6 +12,7 @@ from torch.nn import Linear, Module, Sigmoid
 class Generator(Module):
     dense_layer: Linear
     activation: Sigmoid
+
     WEIGHT_FILENAME = "generator.pt"
 
     def __init__(self: "Generator", length: int):
