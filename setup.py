@@ -9,7 +9,8 @@ setup(
     author="How Melnyczuk",
     author_email="h.melnyczuk@gmail.com",
     url="https://github.com/melnyczuk/repose",
-    packages=find_packages(exclude="src/cli"),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     keywords=["gan", "pose", "posenet"],
     license="GPLv3",
     classifiers=[

@@ -21,6 +21,7 @@ python_version = "3.9"
 
 [scripts]
 build = "python -m build"
+clean = "rm -r build dist src/repose.egg-info"
 cli = "python -m src.cli"
 format = "black -l 80 src"
 lint = "flake8 --max-line-length 80 src"
